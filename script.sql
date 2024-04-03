@@ -71,7 +71,8 @@ CREATE OR REPLACE TYPE tclient AS OBJECT(
     ADRESSE VARCHAR2(100), 
     TELPROF VARCHAR2(10), 
     TELPRIV VARCHAR2(10), 
-    FAX VARCHAR2(10)
+    FAX VARCHAR2(10),
+    client_vehicule tset_ref_vehicule
 );
 /
 
@@ -81,7 +82,8 @@ CREATE OR REPLACE TYPE temploye AS OBJECT(
     nomemploye VARCHAR2(50),
     prenomemploye VARCHAR2(50),
     categorie VARCHAR2(50),
-    salaire float
+    salaire float,
+    employe_intervenants tset_ref_intervenants
 );
 /
 
@@ -90,47 +92,45 @@ CREATE OR REPLACE TYPE temploye AS OBJECT(
 CREATE OR REPLACE TYPE tmarque AS OBJECT(
     NUMMARQUE INTEGER,
     MARQUE VARCHAR2(50),
-    PAYS VARCHAR2(50)
+    PAYS VARCHAR2(50),
+    marque_modele tset_ref_modele
 );
 /
 
 
 
-/* jsp si on utilise ça
-Create type tset_ref_marque as table of ref tmarque;
-/ 
-*/
-
-
 CREATE OR REPLACE TYPE tmodele AS OBJECT(
     nummodele INTEGER,
-    nummarque INTEGER,
-    modele VARCHAR2(50)
+    modele_marque REF tmarque,
+    modele VARCHAR2(50),
+    modele_vehicule tset_ref_vehicule
 );
 /
 
 CREATE OR REPLACE TYPE tvehicule AS OBJECT(
     NUMVEHICULE INTEGER,
-    NUMCLIENT INTEGER,
-    NUMMODELE INTEGER,
+    vehicule_client REF tclient,
+    vehicule_modele REF tmodele,
     NUMIMMAT VARCHAR2(50),
-    ANNEE VARCHAR2(50)
+    ANNEE VARCHAR2(50),
+    vehicule_interventions tset_ref_interventions
 );
 /
 
 CREATE OR REPLACE TYPE tinterventions AS OBJECT(
     NUMINTERVENTION INTEGER,
-    NUMVEHICULE INTEGER,
+    intervention_vehicule REF tvehicule,
     TYPEINTERVENTION VARCHAR2(50),
     DATEDEBINTERV DATE,
     DATEFININTERV DATE,
-    COUTINTERV float
+    COUTINTERV float,
+    intervention_intervenants tset_ref_intervenants
 );
 /
 
 CREATE OR REPLACE TYPE tintervenants AS OBJECT(
-    NUMINTERVENTION INTEGER,
-    NUMEMPLOYE INTEGER,
+    INTERVENANT_INTERVENTION REF tinterventions,
+    INTERVENANT_EMPLOYE REF temploye,
     DATEDEBUT DATE,
     DATEFIN DATE
 );

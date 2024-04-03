@@ -1,3 +1,7 @@
+DROP TABLESPACE SQL3_TBS INCLUDING CONTENTS AND DATAFILES;
+DROP TABLESPACE SQL3_TempTBS INCLUDING CONTENTS AND DATAFILES;
+DROP USER SQL3_BDA CASCADE;
+
 -- Partie 1 Partie I : Relationnel-Objet 
 
 -- B. Creation des TableSpaces et  utilisateur 
@@ -11,8 +15,7 @@ AUTOEXTEND ON;
 CREATE TEMPORARY TABLESPACE SQL3_TempTBS
 TEMPFILE 'c:\sql3_Temptbs.dat' SIZE 25M;
 
-DROP TABLESPACE SQL3_TBS INCLUDING CONTENTS AND DATAFILES;
-DROP TABLESPACE SQL3_TempTBS INCLUDING CONTENTS AND DATAFILES;
+
 
 
 -- 3. Creer un utilisateur SQL3 en lui attribuant les deux tablespaces crees precedemment
@@ -72,7 +75,7 @@ CREATE OR REPLACE TYPE tclient AS OBJECT(
     TELPROF VARCHAR2(10), 
     TELPRIV VARCHAR2(10), 
     FAX VARCHAR2(10),
-    client_vehicule tset_ref_vehicule
+    vehicules tset_ref_vehicule
 );
 /
 
@@ -83,7 +86,7 @@ CREATE OR REPLACE TYPE temploye AS OBJECT(
     prenomemploye VARCHAR2(50),
     categorie VARCHAR2(50),
     salaire float,
-    employe_intervenants tset_ref_intervenants
+    intervenants tset_ref_intervenants
 );
 /
 
@@ -93,7 +96,7 @@ CREATE OR REPLACE TYPE tmarque AS OBJECT(
     NUMMARQUE INTEGER,
     MARQUE VARCHAR2(50),
     PAYS VARCHAR2(50),
-    marque_modele tset_ref_modele
+    modeles tset_ref_modele
 );
 /
 
@@ -101,36 +104,36 @@ CREATE OR REPLACE TYPE tmarque AS OBJECT(
 
 CREATE OR REPLACE TYPE tmodele AS OBJECT(
     nummodele INTEGER,
-    modele_marque REF tmarque,
+    marque REF tmarque,
     modele VARCHAR2(50),
-    modele_vehicule tset_ref_vehicule
+    vehicules tset_ref_vehicule
 );
 /
 
 CREATE OR REPLACE TYPE tvehicule AS OBJECT(
     NUMVEHICULE INTEGER,
-    vehicule_client REF tclient,
-    vehicule_modele REF tmodele,
+    client REF tclient,
+    modele REF tmodele,
     NUMIMMAT VARCHAR2(50),
     ANNEE VARCHAR2(50),
-    vehicule_interventions tset_ref_interventions
+    interventions tset_ref_interventions
 );
 /
 
 CREATE OR REPLACE TYPE tinterventions AS OBJECT(
     NUMINTERVENTION INTEGER,
-    intervention_vehicule REF tvehicule,
+    vehicule REF tvehicule,
     TYPEINTERVENTION VARCHAR2(50),
     DATEDEBINTERV DATE,
     DATEFININTERV DATE,
     COUTINTERV float,
-    intervention_intervenants tset_ref_intervenants
+    intervenants tset_ref_intervenants
 );
 /
 
 CREATE OR REPLACE TYPE tintervenants AS OBJECT(
-    INTERVENANT_INTERVENTION REF tinterventions,
-    INTERVENANT_EMPLOYE REF temploye,
+    intervention REF tinterventions,
+    employe REF temploye,
     DATEDEBUT DATE,
     DATEFIN DATE
 );

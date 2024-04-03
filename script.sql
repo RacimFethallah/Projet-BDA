@@ -31,17 +31,23 @@ GRANT ALL PRIVILEGES TO SQL3_BDA;
 -- C. Langage de definition de donnees
 -- 5. definir tous les types necessaires.
 
-CREATE TYPE tpersonne AS OBJECT(
-    numclient integer,
-    civ varchar2(3), 
-    prenomclient varchar2(50), 
-    NOMCLIENT varchar2(50), 
-    DATENAISSANCE date,  
-    ADRESSE varchar2(100), 
-    TELPROF varchar2(10), 
-    TELPRIV varchar2(10), 
-    FAX varchar2(10),
-)
+CREATE OR REPLACE TYPE tclient AS OBJECT(
+    numclient INTEGER,
+    civ VARCHAR2(3), 
+    prenomclient VARCHAR2(50), 
+    NOMCLIENT VARCHAR2(50), 
+    DATENAISSANCE DATE,  
+    ADRESSE VARCHAR2(100), 
+    TELPROF VARCHAR2(10), 
+    TELPRIV VARCHAR2(10), 
+    FAX VARCHAR2(10)
+);
 /
+
+--pour apres
+CREATE TABLE client OF tclient (
+    CONSTRAINT numclient_pk PRIMARY KEY (numclient),
+    CONSTRAINT civ_check CHECK (civ IN ('M', 'Mle', 'Mme'))
+);
 
 

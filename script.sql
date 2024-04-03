@@ -5,16 +5,14 @@
 -- 2. Creer deux TableSpaces   SQL3_TBS et  SQL3_TempTBS 
 --TableSpace
 CREATE TABLESPACE SQL3_TBS
-DATAFILE 'c:\sql3_tbs.dat' SIZE 2M
-DEFAULT STORAGE (
-  INITIAL 128K
-  NEXT 64K
-  MINEXTENTS 1
-  MAXEXTENTS 5
-);
+DATAFILE 'c:\sql3_tbs.dat' SIZE 50M
+AUTOEXTEND ON;
 --Temporary Tablespace
 CREATE TEMPORARY TABLESPACE SQL3_TempTBS
-TEMPFILE 'c:\sql3_Temptbs.dat' SIZE 2M;
+TEMPFILE 'c:\sql3_Temptbs.dat' SIZE 25M;
+
+DROP TABLESPACE SQL3_TBS INCLUDING CONTENTS AND DATAFILES;
+DROP TABLESPACE SQL3_TempTBS INCLUDING CONTENTS AND DATAFILES;
 
 
 -- 3. Creer un utilisateur SQL3 en lui attribuant les deux tablespaces crees precedemment
@@ -30,7 +28,40 @@ GRANT ALL PRIVILEGES TO SQL3_BDA;
 
 -- C. Langage de definition de donnees
 -- 5. definir tous les types necessaires.
---done
+
+
+--pour montrer les attributs:
+/*
+SELECT ATTR_NAME, ATTR_TYPE_NAME, LENGTH, SCALE
+FROM USER_TYPE_ATTRS
+WHERE TYPE_NAME = 'TCLIENT';
+*/
+
+CREATE type tclient;
+/
+CREATE type temploye;
+/
+CREATE type tmarque;
+/
+CREATE type tmodele;
+/
+CREATE type tvehicule;
+/
+CREATE type tinterventions;
+/
+CREATE type tintervenants;
+/
+
+CREATE type tset_ref_modele AS TABLE OF ref tmodele;
+/
+CREATE type tset_ref_vehicule AS TABLE OF ref tvehicule;
+/
+CREATE type tset_ref_interventions AS TABLE OF ref tinterventions;
+/
+CREATE type tset_ref_intervenants AS TABLE OF ref tintervenants;
+/
+
+
 CREATE OR REPLACE TYPE tclient AS OBJECT(  
     numclient INTEGER,
     civ VARCHAR2(3), 
@@ -44,7 +75,7 @@ CREATE OR REPLACE TYPE tclient AS OBJECT(
 );
 /
 
---done
+
 CREATE OR REPLACE TYPE temploye AS OBJECT(
     numemploye INTEGER,
     nomemploye VARCHAR2(50),
@@ -55,7 +86,7 @@ CREATE OR REPLACE TYPE temploye AS OBJECT(
 /
 
 
---done
+
 CREATE OR REPLACE TYPE tmarque AS OBJECT(
     NUMMARQUE INTEGER,
     MARQUE VARCHAR2(50),
@@ -64,15 +95,15 @@ CREATE OR REPLACE TYPE tmarque AS OBJECT(
 /
 
 /* jsp si on utilise ça
-Create type tset_ref_marque as table of ref tville;
+Create type tset_ref_marque as table of ref tmarque;
 / 
 */
 
 
 CREATE OR REPLACE TYPE tmodele AS OBJECT(
-    NUMMODELE INTEGER,
-    NUMMARQUE INTEGER,
-    MODELE VARCHAR2(50)
+    nummodele INTEGER,
+    nummarque INTEGER,
+    modele VARCHAR2(50)
 );
 /
 
@@ -81,7 +112,7 @@ CREATE OR REPLACE TYPE tvehicule AS OBJECT(
     NUMCLIENT INTEGER,
     NUMMODELE INTEGER,
     NUMIMMAT VARCHAR2(50),
-    ANNEE INTEGER
+    ANNEE VARCHAR2(50)
 );
 /
 
@@ -91,7 +122,7 @@ CREATE OR REPLACE TYPE tinterventions AS OBJECT(
     TYPEINTERVENTION VARCHAR2(50),
     DATEDEBINTERV DATE,
     DATEFININTERV DATE,
-    COUTINTERV NUMBER
+    COUTINTERV float
 );
 /
 
@@ -103,20 +134,126 @@ CREATE OR REPLACE TYPE tintervenants AS OBJECT(
 );
 /
 
+------------------- Done -------------------------
 
 
 -- 6 Définir les méthodes permettant de : 
 
+-- pour montrer les methodes d'un type
+/*
+SELECT OBJECT_NAME, PROCEDURE_NAME
+FROM ALL_PROCEDURES
+WHERE OBJECT_NAME = 'TEMPLOYE';
+*/
+
+
 
 -- 6.1 Calculer pour chaque employé, le nombre des interventions effectuées. 
+ALTER TYPE temploye
+ADD MEMBER FUNCTION calcul_interventions RETURN NUMBER
+CASCADE;
+
+
+-- on doit d'abbord creer la table intervenants
+CREATE OR REPLACE TYPE BODY temploye AS
+    MEMBER FUNCTION calcul_interventions RETURN NUMBER IS
+        nombre_interventions NUMBER;
+    BEGIN
+        SELECT COUNT(*) INTO nombre_interventions
+        FROM INTERVENANTS
+        WHERE NUMEMPLOYE = self.numemploye;
+        
+        RETURN nombre_interventions;
+    END calcul_interventions;
+END;
+/
+
+
 
 -- 6.2 Calculer pour chaque marque, le nombre de modèles. 
 
+ALTER TYPE tmarque
+ADD MEMBER FUNCTION calcul_modeles RETURN NUMBER
+CASCADE;
+
+-- on doit d'abbord creer la table modele
+CREATE OR REPLACE TYPE BODY tmarque AS
+    MEMBER FUNCTION calcul_modeles RETURN NUMBER IS
+        nombre_modeles NUMBER;
+    BEGIN
+        SELECT COUNT(*) INTO nombre_modeles
+        FROM modele
+        WHERE NUMMARQUE = self.nummarque;
+
+        RETURN nombre_modeles;
+    END;
+END;
+/
+
+
 -- 6.3 Calculer pour chaque modèle, le nombre de véhicules. 
+
+ALTER TYPE tmodele
+ADD MEMBER FUNCTION calcul_vehicules RETURN NUMBER
+CASCADE;
+
+
+--has an error
+CREATE OR REPLACE TYPE BODY tmodele AS
+    MEMBER FUNCTION calcul_vehicules RETURN NUMBER IS
+        nombre_vehicules NUMBER;
+    BEGIN
+        SELECT COUNT(*) INTO nombre_vehicules
+        FROM vehicule
+        WHERE NUMMODELE = self.NUMMODELE;
+        RETURN nombre_vehicules;
+    END calcul_vehicules;
+END;
+/
 
 -- 6.4 Lister pour chaque client, ses  véhicules. 
 
+ALTER TYPE tclient
+ADD MEMBER FUNCTION lister_vehicules RETURN VARCHAR2
+CASCADE;
+
+CREATE OR REPLACE TYPE BODY tclient AS
+    MEMBER FUNCTION lister_vehicules RETURN VARCHAR2 IS
+        vehicules VARCHAR2(1000);
+    BEGIN
+        SELECT LISTAGG(NUMVEHICULE, ', ') WITHIN GROUP (ORDER BY NUMVEHICULE) INTO vehicules
+        FROM vehicule
+        WHERE NUMCLIENT = self.NUMCLIENT;
+        RETURN vehicules;
+    END lister_vehicules;
+END;
+/
+
 -- 6.5 Calculer pour chaque marque, son chiffre d’affaire.
+
+ALTER TYPE tmarque
+ADD MEMBER FUNCTION calcul_chiffre_affaire RETURN NUMBER
+CASCADE;
+
+CREATE OR REPLACE TYPE BODY tmarque AS
+    MEMBER FUNCTION calcul_chiffre_affaire RETURN NUMBER IS
+        chiffre_affaire NUMBER;
+    BEGIN
+        SELECT SUM(COUTINTERV) INTO chiffre_affaire
+        FROM interventions
+        WHERE NUMVEHICULE IN (
+            SELECT NUMVEHICULE
+            FROM vehicule
+            WHERE NUMMODELE IN (
+                SELECT NUMMODELE
+                FROM modele
+                WHERE NUMMARQUE = self.NUMMARQUE
+            )
+        );
+        RETURN chiffre_affaire;
+    END calcul_chiffre_affaire;
+END;
+/
 
 
 
@@ -132,7 +269,8 @@ CREATE TABLE client OF tclient (
 
 
 CREATE TABLE employe OF temploye (
-    CONSTRAINT numemploye_pk PRIMARY KEY (NUMEMPLOYE)
+    CONSTRAINT numemploye_pk PRIMARY KEY (NUMEMPLOYE),
+    CONSTRAINT categorie_check CHECK (categorie IN ('Mecanicien', 'Assistant'))
 );
 
 CREATE TABLE marque OF tmarque (

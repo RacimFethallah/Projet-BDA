@@ -155,66 +155,118 @@ WHERE OBJECT_NAME = 'TEMPLOYE';
 
 -- 6.1 Calculer pour chaque employé, le nombre des interventions effectuées. 
 ALTER TYPE temploye
-ADD MEMBER FUNCTION calcul_interventions RETURN NUMBER
+ADD MEMBER FUNCTION calcul_interventions RETURN INTEGER
 CASCADE;
 
 
--- on doit d'abbord creer la table intervenants
-CREATE OR REPLACE TYPE BODY temploye AS
-    MEMBER FUNCTION calcul_interventions RETURN NUMBER IS
-        nombre_interventions NUMBER;
-    BEGIN
-        SELECT COUNT(*) INTO nombre_interventions
-        FROM INTERVENANTS
-        WHERE NUMEMPLOYE = self.numemploye;
+-- -- on doit d'abbord creer la table intervenants
+-- CREATE OR REPLACE TYPE BODY temploye AS
+--     MEMBER FUNCTION calcul_interventions RETURN NUMBER IS
+--         nombre_interventions NUMBER;
+--     BEGIN
+--         SELECT COUNT(*) INTO nombre_interventions
+--         FROM INTERVENANTS
+--         WHERE NUMEMPLOYE = self.numemploye;
         
+--         RETURN nombre_interventions;
+--     END calcul_interventions;
+-- END;
+-- /
+
+--good
+CREATE OR REPLACE TYPE BODY temploye AS
+    MEMBER FUNCTION calcul_interventions RETURN INTEGER IS
+        nombre_interventions INTEGER := 0;
+    BEGIN
+        FOR i IN 1..self.intervenants.COUNT LOOP
+            nombre_interventions := nombre_interventions + 1;
+        END LOOP;
         RETURN nombre_interventions;
-    END calcul_interventions;
+    END;
 END;
 /
+
+CREATE OR REPLACE TYPE BODY temploye AS
+    MEMBER FUNCTION calcul_interventions RETURN INTEGER IS
+        nombre_interventions INTEGER := 0;
+    BEGIN
+        nombre_interventions := self.intervenants.COUNT;
+        RETURN nombre_interventions;
+    END;
+END;
+/
+
+SELECT nomemploye, prenomemploye, e.calcul_interventions() AS nb_interventions
+FROM employe e;
 
 
 
 -- 6.2 Calculer pour chaque marque, le nombre de modèles. 
 
 ALTER TYPE tmarque
-ADD MEMBER FUNCTION calcul_modeles RETURN NUMBER
+ADD MEMBER FUNCTION calcul_modeles RETURN INTEGER
 CASCADE;
 
--- on doit d'abbord creer la table modele
+--good
 CREATE OR REPLACE TYPE BODY tmarque AS
-    MEMBER FUNCTION calcul_modeles RETURN NUMBER IS
-        nombre_modeles NUMBER;
+    MEMBER FUNCTION calcul_modeles RETURN INTEGER IS
+        nombre_modeles INTEGER := 0;
     BEGIN
-        SELECT COUNT(*) INTO nombre_modeles
-        FROM modele
-        WHERE NUMMARQUE = self.nummarque;
-
+        nombre_modeles := self.modeles.COUNT;
         RETURN nombre_modeles;
     END;
 END;
 /
 
 
+-- -- on doit d'abbord creer la table modele
+-- CREATE OR REPLACE TYPE BODY tmarque AS
+--     MEMBER FUNCTION calcul_modeles RETURN NUMBER IS
+--         nombre_modeles NUMBER;
+--     BEGIN
+--         SELECT COUNT(*) INTO nombre_modeles
+--         FROM modele
+--         WHERE NUMMARQUE = self.nummarque;
+
+--         RETURN nombre_modeles;
+--     END;
+-- END;
+-- /
+
+
+
+
+
 -- 6.3 Calculer pour chaque modèle, le nombre de véhicules. 
 
 ALTER TYPE tmodele
-ADD MEMBER FUNCTION calcul_vehicules RETURN NUMBER
+ADD MEMBER FUNCTION calcul_vehicules RETURN INTEGER
 CASCADE;
 
 
---has an error
 CREATE OR REPLACE TYPE BODY tmodele AS
-    MEMBER FUNCTION calcul_vehicules RETURN NUMBER IS
-        nombre_vehicules NUMBER;
+    MEMBER FUNCTION calcul_vehicules RETURN INTEGER IS
+        nombre_vehicules INTEGER := 0;
     BEGIN
-        SELECT COUNT(*) INTO nombre_vehicules
-        FROM vehicule
-        WHERE NUMMODELE = self.NUMMODELE;
+        nombre_vehicules := self.vehicules.COUNT;
         RETURN nombre_vehicules;
-    END calcul_vehicules;
+    END;
 END;
 /
+
+
+-- --has an error
+-- CREATE OR REPLACE TYPE BODY tmodele AS
+--     MEMBER FUNCTION calcul_vehicules RETURN NUMBER IS
+--         nombre_vehicules NUMBER;
+--     BEGIN
+--         SELECT COUNT(*) INTO nombre_vehicules
+--         FROM vehicule
+--         WHERE NUMMODELE = self.NUMMODELE;
+--         RETURN nombre_vehicules;
+--     END calcul_vehicules;
+-- END;
+-- /
 
 -- 6.4 Lister pour chaque client, ses  véhicules. 
 
@@ -269,44 +321,39 @@ END;
 CREATE TABLE client OF tclient (
     CONSTRAINT numclient_pk PRIMARY KEY (numclient),
     CONSTRAINT civ_check CHECK (civ IN ('M', 'Mle', 'Mme')))
-NESTED TABLE vehicules STORE AS tab_vehicules;
+NESTED TABLE vehicules STORE AS tab_client_vehicules;
 
-
-
--- create table auteur of tauteur(constraint pk_auteur primary key(Noauteur))
--- nested table auteur_collaboration store as tab_auteur_collaboration;
 
 
 CREATE TABLE employe OF temploye (
     CONSTRAINT numemploye_pk PRIMARY KEY (NUMEMPLOYE),
     CONSTRAINT categorie_check CHECK (categorie IN ('Mecanicien', 'Assistant')))
-NESTED TABLE intervenants STORE AS tab_intervenants;
+NESTED TABLE intervenants STORE AS tab_employe_intervenant;
 
 
 
 CREATE TABLE marque OF tmarque (
     CONSTRAINT nummarque_pk PRIMARY KEY (NUMMARQUE))
-NESTED TABLE modeles STORE AS tab_modeles;
+NESTED TABLE modeles STORE AS tab_marque_modele;
 
 CREATE TABLE modele OF tmodele (
     CONSTRAINT nummodele_pk PRIMARY KEY (NUMMODELE),
-    CONSTRAINT nummarque_fk FOREIGN KEY (marque) REFERENCES marque
-);
+    CONSTRAINT nummarque_fk FOREIGN KEY (marque) REFERENCES marque)
+NESTED TABLE vehicules STORE AS tab_modele_vehicule;
 
 CREATE TABLE vehicule OF tvehicule (
     CONSTRAINT numvehicule_pk PRIMARY KEY (NUMVEHICULE),
-    CONSTRAINT numclient_fk FOREIGN KEY (NUMCLIENT) REFERENCES client(NUMCLIENT),
-    CONSTRAINT nummodele_fk FOREIGN KEY (NUMMODELE) REFERENCES modele(NUMMODELE)
-);
+    CONSTRAINT numclient_fk FOREIGN KEY (client) REFERENCES client,
+    CONSTRAINT nummodele_fk FOREIGN KEY (modele) REFERENCES modele)
+NESTED TABLE interventions STORE AS tab_vehicule_intervention;
 
 CREATE TABLE interventions OF tinterventions (
     CONSTRAINT numintervention_pk PRIMARY KEY (NUMINTERVENTION),
-    CONSTRAINT numvehicule_fk FOREIGN KEY (NUMVEHICULE) REFERENCES vehicule(NUMVEHICULE)
-);
+    CONSTRAINT numvehicule_fk FOREIGN KEY (vehicule) REFERENCES vehicule)
+    NESTED TABLE intervenants STORE AS tab_intervenant_intervention;
 
 CREATE TABLE intervenants OF tintervenants (
-    CONSTRAINT numintervention_fk FOREIGN KEY (NUMINTERVENTION) REFERENCES interventions(NUMINTERVENTION),
-    CONSTRAINT numemploye_fk FOREIGN KEY (NUMEMPLOYE) REFERENCES employe(NUMEMPLOYE)
-);
+    CONSTRAINT numintervention_fk FOREIGN KEY (intervention) REFERENCES interventions,
+    CONSTRAINT numemploye_fk FOREIGN KEY (employe) REFERENCES employe);
 
 -- D. Langage de manipulation de donnees

@@ -43,3 +43,5 @@ CREATE TYPE tpersonne AS OBJECT(
     FAX varchar2(10),
 )
 /
+
+

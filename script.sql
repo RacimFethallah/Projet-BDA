@@ -268,23 +268,29 @@ END;
 --pas encore executé
 CREATE TABLE client OF tclient (
     CONSTRAINT numclient_pk PRIMARY KEY (numclient),
-    CONSTRAINT civ_check CHECK (civ IN ('M', 'Mle', 'Mme'))
-);
+    CONSTRAINT civ_check CHECK (civ IN ('M', 'Mle', 'Mme')))
+NESTED TABLE vehicules STORE AS tab_vehicules;
 
+
+
+-- create table auteur of tauteur(constraint pk_auteur primary key(Noauteur))
+-- nested table auteur_collaboration store as tab_auteur_collaboration;
 
 
 CREATE TABLE employe OF temploye (
     CONSTRAINT numemploye_pk PRIMARY KEY (NUMEMPLOYE),
-    CONSTRAINT categorie_check CHECK (categorie IN ('Mecanicien', 'Assistant'))
-);
+    CONSTRAINT categorie_check CHECK (categorie IN ('Mecanicien', 'Assistant')))
+NESTED TABLE intervenants STORE AS tab_intervenants;
+
+
 
 CREATE TABLE marque OF tmarque (
-    CONSTRAINT nummarque_pk PRIMARY KEY (NUMMARQUE)
-);
+    CONSTRAINT nummarque_pk PRIMARY KEY (NUMMARQUE))
+NESTED TABLE modeles STORE AS tab_modeles;
 
 CREATE TABLE modele OF tmodele (
     CONSTRAINT nummodele_pk PRIMARY KEY (NUMMODELE),
-    CONSTRAINT nummarque_fk FOREIGN KEY (NUMMARQUE) REFERENCES marque(NUMMARQUE)
+    CONSTRAINT nummarque_fk FOREIGN KEY (marque) REFERENCES marque
 );
 
 CREATE TABLE vehicule OF tvehicule (

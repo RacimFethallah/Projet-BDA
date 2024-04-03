@@ -105,11 +105,31 @@ CREATE OR REPLACE TYPE tintervenants AS OBJECT(
 
 
 
---pour apres
+-- 6 Définir les méthodes permettant de : 
+
+
+-- 6.1 Calculer pour chaque employé, le nombre des interventions effectuées. 
+
+-- 6.2 Calculer pour chaque marque, le nombre de modèles. 
+
+-- 6.3 Calculer pour chaque modèle, le nombre de véhicules. 
+
+-- 6.4 Lister pour chaque client, ses  véhicules. 
+
+-- 6.5 Calculer pour chaque marque, son chiffre d’affaire.
+
+
+
+
+
+-- 7. Définir les tables nécessaires à la base de données.
+--pas encore executé
 CREATE TABLE client OF tclient (
     CONSTRAINT numclient_pk PRIMARY KEY (numclient),
     CONSTRAINT civ_check CHECK (civ IN ('M', 'Mle', 'Mme'))
 );
+
+
 
 CREATE TABLE employe OF temploye (
     CONSTRAINT numemploye_pk PRIMARY KEY (NUMEMPLOYE)

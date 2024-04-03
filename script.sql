@@ -94,6 +94,8 @@ CREATE OR REPLACE TYPE tmarque AS OBJECT(
 );
 /
 
+
+
 /* jsp si on utilise ça
 Create type tset_ref_marque as table of ref tmarque;
 / 

@@ -420,7 +420,7 @@ INSERT INTO client VALUES (19, 'Mme', 'Dalila', 'MOUHTADI', NULL, '6, BD TRIPOLI
 INSERT INTO client VALUES (20, 'M.', 'Younes', 'CHALAH', NULL, 'CITE DES 60 LOGTS BT D N 48-NACIRIA-BOUMERDES', '0561358279', NULL, NULL, NULL);
 INSERT INTO client VALUES (21, 'M.', 'Boubeker', 'BARKAT', TO_DATE('08/11/1935', 'DD/MM/YYYY'), 'CITE MENTOURI N 71 BT AB SMK Constantine', '0561824538', '0561326179', NULL, NULL);
 INSERT INTO client VALUES (22, 'M.', 'Seddik', 'HMIA', NULL, '25 RUE BEN YAHIYA-JIJEL', '0562379513', '0562493627', NULL, NULL);
-INSERT INTO client VALUES (23, 'M.', 'Lamine', 'MERABAT', TO_DATE('09/13/1965', 'DD/MM/YYYY'), 'CITE JEANNE D''ARC ECRAN B2-GAMBETTA – ORAN', '0561724538', '0561724538', NULL, NULL);
+INSERT INTO client VALUES (23, 'M.', 'Lamine', 'MERABAT', TO_DATE('09/12/1965', 'DD/MM/YYYY'), 'CITE JEANNE D''ARC ECRAN B2-GAMBETTA – ORAN', '0561724538', '0561724538', NULL, NULL);
 
 -- Remplir la table employe
 INSERT INTO employe VALUES (53, 'LACHEMI', 'Bouzid', 'Mecanicien', 25000, NULL);  
@@ -575,3 +575,29 @@ INSERT INTO intervenants VALUES (12, 55, TO_DATE('05/05/2006 09:00:00', 'DD/MM/Y
 INSERT INTO intervenants VALUES (12, 56, TO_DATE('03/05/2006 09:00:00', 'DD/MM/YYYY HH24:MI:SS'), TO_DATE('05/05/2006 12:00:00', 'DD/MM/YYYY HH24:MI:SS'));
 INSERT INTO intervenants VALUES (13, 64, TO_DATE('12/05/2006 14:00:00', 'DD/MM/YYYY HH24:MI:SS'), TO_DATE('12/05/2006 18:00:00', 'DD/MM/YYYY HH24:MI:SS'));
 INSERT INTO intervenants VALUES (14, 88, TO_DATE('07/05/2006 14:00:00', 'DD/MM/YYYY HH24:MI:SS'), TO_DATE('10/05/2006 18:00:00', 'DD/MM/YYYY HH24:MI:SS'));
+
+
+
+
+SELECT m.modele, ma.marque
+FROM tmodele m, tmarque ma
+WHERE m.marque = REF(ma);
+
+SELECT v.numimmat, v.annee
+FROM tvehicule v
+WHERE v.interventions IS NOT EMPTY;
+
+SELECT AVG(DATEFININTERV - DATEDEBINTERV) AS duree_moyenne_intervention
+FROM interventions;
+
+
+SELECT SUM(COUTINTERV) AS montant_global
+FROM interventions
+WHERE COUTINTERV > 30000;
+
+
+SELECT e.numemploye, e.nomemploye, e.prenomemploye, COUNT(*) AS nombre_interventions
+FROM employe e
+JOIN TABLE(e.intervenants) i ON e.numemploye = i.employe.numemploye
+GROUP BY e.numemploye, e.nomemploye, e.prenomemploye
+ORDER BY COUNT(*) DESC;

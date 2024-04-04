@@ -1,0 +1,53 @@
+VAR_GLOBAL{
+    CONST Y=3.3;
+INTEGER T [100];
+INTEGER X=4000;
+}
+DECLARATION{INTEGER X;
+FLOAT Z,b,U;
+INTEGER A;
+INTEGER A;
+CONST Y=3.3;
+INTEGER T [100];
+INTEGER X=4000;
+FLOAT Z=(-5.5);}
+INSTRUCTION{
+%% try
+WRITE ("Donner la valeur de A :");
+READ (A); 
+WRITE ("La Valeur de A est ", A, "."); 
+READ (A); 
+FOR(i : 0 : 1 : n) { 
+i=i+1; 
+WRITE ("La Valeur de A est ", A, "."); 
+READ (A); 
+}
+WHILE(A>B){
+C=C+1;
+}
+IF(A==0){
+C=1;
+D=15; 
+C=C+1;
+}
+ELSE{
+A=3;
+B=B*D/(A+B);
+IF(A==0){
+C=1;
+WHILE(A>B){
+C=C+1;
+A=A-(C+D);
+}
+}
+ELSE{
+A=3;
+B=B*D/(A+B);
+}}
+WHILE(C>1){
+C=C-1;
+C=C+1;
+}
+Y=0;
+C=C+1;
+T[I]=T[I];}

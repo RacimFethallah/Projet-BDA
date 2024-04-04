@@ -110,6 +110,9 @@ CREATE OR REPLACE TYPE tmodele AS OBJECT(
 );
 /
 
+
+
+
 CREATE OR REPLACE TYPE tvehicule AS OBJECT(
     NUMVEHICULE INTEGER,
     client REF tclient,
@@ -355,7 +358,7 @@ END;
 -- 7. Définir les tables nécessaires à la base de données.
 CREATE TABLE client OF tclient (
     CONSTRAINT numclient_pk PRIMARY KEY (numclient),
-    CONSTRAINT civ_check CHECK (civ IN ('M', 'Mle', 'Mme')))
+    CONSTRAINT civ_check CHECK (civ IN ('M.', 'Mle', 'Mme')))
 NESTED TABLE vehicules STORE AS tab_client_vehicules;
 
 
@@ -579,9 +582,11 @@ INSERT INTO intervenants VALUES (14, 88, TO_DATE('07/05/2006 14:00:00', 'DD/MM/Y
 
 
 
-SELECT m.modele, ma.marque
-FROM tmodele m, tmarque ma
-WHERE m.marque = REF(ma);
+select m.modele as nom_modele,
+deref(m.marque)
+from modele m;
+
+
 
 SELECT v.numimmat, v.annee
 FROM tvehicule v

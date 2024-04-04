@@ -139,7 +139,6 @@ CREATE OR REPLACE TYPE tintervenants AS OBJECT(
 );
 /
 
-------------------- Done -------------------------
 
 
 -- 6 Définir les méthodes permettant de : 
@@ -151,7 +150,7 @@ FROM ALL_PROCEDURES
 WHERE OBJECT_NAME = 'TEMPLOYE';
 */
 
-
+--------------------------------------------------------------------------------------------------------
 
 -- 6.1 Calculer pour chaque employé, le nombre des interventions effectuées. 
 ALTER TYPE temploye
@@ -173,18 +172,18 @@ CASCADE;
 -- END;
 -- /
 
---good
-CREATE OR REPLACE TYPE BODY temploye AS
-    MEMBER FUNCTION calcul_interventions RETURN INTEGER IS
-        nombre_interventions INTEGER := 0;
-    BEGIN
-        FOR i IN 1..self.intervenants.COUNT LOOP
-            nombre_interventions := nombre_interventions + 1;
-        END LOOP;
-        RETURN nombre_interventions;
-    END;
-END;
-/
+-- --good
+-- CREATE OR REPLACE TYPE BODY temploye AS
+--     MEMBER FUNCTION calcul_interventions RETURN INTEGER IS
+--         nombre_interventions INTEGER := 0;
+--     BEGIN
+--         FOR i IN 1..self.intervenants.COUNT LOOP
+--             nombre_interventions := nombre_interventions + 1;
+--         END LOOP;
+--         RETURN nombre_interventions;
+--     END;
+-- END;
+-- /
 
 CREATE OR REPLACE TYPE BODY temploye AS
     MEMBER FUNCTION calcul_interventions RETURN INTEGER IS
@@ -199,6 +198,9 @@ END;
 SELECT nomemploye, prenomemploye, e.calcul_interventions() AS nb_interventions
 FROM employe e;
 
+
+
+--------------------------------------------------------------------------------------------------------
 
 
 -- 6.2 Calculer pour chaque marque, le nombre de modèles. 
@@ -218,6 +220,9 @@ CREATE OR REPLACE TYPE BODY tmarque AS
 END;
 /
 
+-- SELECT MARQUE, m.calcul_modeles() AS nb_modeles
+-- FROM marque m;
+
 
 -- -- on doit d'abbord creer la table modele
 -- CREATE OR REPLACE TYPE BODY tmarque AS
@@ -235,7 +240,7 @@ END;
 
 
 
-
+--------------------------------------------------------------------------------------------------------
 
 -- 6.3 Calculer pour chaque modèle, le nombre de véhicules. 
 
@@ -255,62 +260,93 @@ END;
 /
 
 
--- --has an error
--- CREATE OR REPLACE TYPE BODY tmodele AS
---     MEMBER FUNCTION calcul_vehicules RETURN NUMBER IS
---         nombre_vehicules NUMBER;
---     BEGIN
---         SELECT COUNT(*) INTO nombre_vehicules
---         FROM vehicule
---         WHERE NUMMODELE = self.NUMMODELE;
---         RETURN nombre_vehicules;
---     END calcul_vehicules;
--- END;
--- /
 
+--------------------------------------------------------------------------------------------------------
 -- 6.4 Lister pour chaque client, ses  véhicules. 
 
 ALTER TYPE tclient
-ADD MEMBER FUNCTION lister_vehicules RETURN VARCHAR2
+ADD MEMBER FUNCTION lister_vehicules RETURN tset_ref_vehicule
 CASCADE;
 
+
 CREATE OR REPLACE TYPE BODY tclient AS
-    MEMBER FUNCTION lister_vehicules RETURN VARCHAR2 IS
-        vehicules VARCHAR2(1000);
+    MEMBER FUNCTION lister_vehicules RETURN tset_ref_vehicule IS
     BEGIN
-        SELECT LISTAGG(NUMVEHICULE, ', ') WITHIN GROUP (ORDER BY NUMVEHICULE) INTO vehicules
-        FROM vehicule
-        WHERE NUMCLIENT = self.NUMCLIENT;
-        RETURN vehicules;
-    END lister_vehicules;
+        RETURN self.vehicules;
+    END;
 END;
 /
 
--- 6.5 Calculer pour chaque marque, son chiffre d’affaire.
+
+-- exemple pour executer: 
+-- SELECT c.nomclient, c.prenomclient, v.numvehicule, v.numimmat, v.annee, m.modele, ma.marque
+-- FROM client c, TABLE(c.get_vehicules()) v
+-- JOIN TABLE(v.modele.modeles) m
+-- JOIN TABLE(m.marque.modeles) ma
+-- WHERE c.nomclient = 'Dupont';
+
+
+
+-- ou ça
+
+-- ALTER TYPE tclient
+-- ADD MEMBER FUNCTION lister_vehicules RETURN varchar2
+-- CASCADE;
+
+
+-- CREATE OR REPLACE TYPE BODY tclient AS
+--     MEMBER FUNCTION lister_vehicules RETURN VARCHAR2 IS
+--         liste_vehicules VARCHAR2(4000);
+--     BEGIN
+--         liste_vehicules := 'Véhicules du client ' || self.nomclient || ' ' || self.prenomclient || ' :' || CHR(10);
+--         FOR i IN 1..self.vehicules.COUNT LOOP
+--             liste_vehicules := liste_vehicules || 'Véhicule n° ' || self.vehicules(i).numvehicule ||
+--                                 ', Immatriculation : ' || self.vehicules(i).numimmat ||
+--                                 ', Année : ' || self.vehicules(i).annee ||
+--                                 ', Modèle : ' || self.vehicules(i).modele.modele ||
+--                                 ', Marque : ' || self.vehicules(i).modele.marque.marque || CHR(10);
+--         END LOOP;
+--         RETURN liste_vehicules;
+--     END;
+-- END;
+-- /
+
+
+
+-- contient des erreurs
+-------------------------------------------------------------------------------------------
+-- 6.5 Calculer pour chaque marque, son chiffre d’affaire. 
 
 ALTER TYPE tmarque
 ADD MEMBER FUNCTION calcul_chiffre_affaire RETURN NUMBER
 CASCADE;
 
+
 CREATE OR REPLACE TYPE BODY tmarque AS
     MEMBER FUNCTION calcul_chiffre_affaire RETURN NUMBER IS
-        chiffre_affaire NUMBER;
+        chiffre_affaire NUMBER := 0;
     BEGIN
-        SELECT SUM(COUTINTERV) INTO chiffre_affaire
-        FROM interventions
-        WHERE NUMVEHICULE IN (
-            SELECT NUMVEHICULE
-            FROM vehicule
-            WHERE NUMMODELE IN (
-                SELECT NUMMODELE
-                FROM modele
-                WHERE NUMMARQUE = self.NUMMARQUE
-            )
-        );
+        FOR modele_ref IN (SELECT DEREF(m.modeles) AS modele
+                           FROM TABLE(self.modeles) m)
+        LOOP
+            FOR vehicule IN (SELECT DEREF(v) AS vehicule
+                             FROM TABLE(CAST(modele_ref.vehicules AS tset_ref_vehicule)) v)
+            LOOP
+                FOR intervention IN (SELECT DEREF(i) AS intervention
+                                     FROM TABLE(CAST(MULTISET(vehicule.interventions))) i)
+                LOOP
+                    chiffre_affaire := chiffre_affaire + intervention.coutinterv;
+                END LOOP;
+            END LOOP;
+        END LOOP;
         RETURN chiffre_affaire;
-    END calcul_chiffre_affaire;
+    END;
 END;
 /
+
+
+
+
 
 
 

@@ -582,10 +582,22 @@ INSERT INTO intervenants VALUES (14, 88, TO_DATE('07/05/2006 14:00:00', 'DD/MM/Y
 
 
 
-select m.modele as nom_modele,
-deref(m.marque)
-from modele m;
+SELECT m.*, deref(m.marque)
+FROM modele m;
 
+
+-- livresauteurs tsetLivre;
+-- Begin
+-- Select CAST(MULTISET( select deref(deref(value(c)).collaboration_livre)  
+--                       from table(self.auteur_collaboration) c
+--                       where deref(value(c)).rang=1
+--                      ) as tsetLivre
+-- 		   ) into livresauteurs
+-- from dual; 
+-- return livresauteurs;
+-- end;
+-- END;
+-- /
 
 
 SELECT v.numimmat, v.annee

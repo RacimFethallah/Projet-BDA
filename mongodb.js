@@ -17,8 +17,8 @@
     {
       "numIntervention": 7,
       "typeIntervention": "Entretien",
-      "dateDeb": ISODate("2006-04-09T09:00:00Z"),
-      "dateFin": ISODate("2006-04-09T18:00:00Z"),
+      "dateDeb": ISODate("2006-04-09T09:00:00.000"),
+      "dateFin": ISODate("2006-04-09T18:00:00.000"),
       "cout": 8000,
       "employes": [
         {
@@ -27,8 +27,8 @@
           "prenom": "Zouhir",
           "categorie": "Assistant",
           "salaire": 12000,
-          "dateDeb": ISODate("2006-04-09T14:00:00Z"),
-          "dateFin": ISODate("2006-04-09T18:00:00Z")
+          "dateDeb": ISODate("2006-04-09T14:00:00.000"),
+          "dateFin": ISODate("2006-04-09T18:00:00.000")
         },
         {
           "numEmploye": 65,
@@ -36,16 +36,16 @@
           "prenom": "Mustapha",
           "categorie": "Mécanicien",
           "salaire": 24000,
-          "dateDeb": ISODate("2006-04-09T09:00:00Z"),
-          "dateFin": ISODate("2006-04-09T12:00:00Z")
+          "dateDeb": ISODate("2006-04-09T09:00:00.000"),
+          "dateFin": ISODate("2006-04-09T12:00:00.000")
         }
       ]
     },
     {
       "numIntervention": 14,
       "typeIntervention": "Réparation",
-      "dateDeb": ISODate("2006-05-10T14:00:00Z"),
-      "dateFin": ISODate("2006-05-12T12:00:00Z"),
+      "dateDeb": ISODate("2006-05-10T14:00:00.000"),
+      "dateFin": ISODate("2006-05-12T12:00:00.000"),
       "cout": 39000,
       "employes": [
         { //l'employé 88 n'existe pas
@@ -54,8 +54,8 @@
           "prenom": "",
           "categorie": "",
           "salaire": 0,
-          "dateDeb": ISODate("0000-00-00T00:00:00Z"),
-          "dateFin": ISODate("0000-00-00T00:00:00Z")
+          "dateDeb": ISODate("0000-00-00T00:00:00.000"),
+          "dateFin": ISODate("0000-00-00T00:00:00.000")
         }
       ]
     }
@@ -63,7 +63,7 @@
 }
 
 
-
+//B. Remplir la collection via un script
 //Insertions des vehicules dans la collection vehicules
 db.vehicules.insertMany([
   {
@@ -83,8 +83,8 @@ db.vehicules.insertMany([
       {
         "numIntervention": 7,
         "typeIntervention": "Entretien",
-        "dateDeb": ISODate("2006-04-09T09:00:00Z"),
-        "dateFin": ISODate("2006-04-09T18:00:00Z"),
+        "dateDeb": ISODate("2006-04-09T09:00:00.000"),
+        "dateFin": ISODate("2006-04-09T18:00:00.000"),
         "cout": 8000,
         "employes": [
           {
@@ -93,8 +93,8 @@ db.vehicules.insertMany([
             "prenom": "Zouhir",
             "categorie": "Assistant",
             "salaire": 12000,
-            "dateDeb": ISODate("2006-04-09T14:00:00Z"),
-            "dateFin": ISODate("2006-04-09T18:00:00Z")
+            "dateDeb": ISODate("2006-04-09T14:00:00.000"),
+            "dateFin": ISODate("2006-04-09T18:00:00.000")
           },
           {
             "numEmploye": 65,
@@ -102,16 +102,16 @@ db.vehicules.insertMany([
             "prenom": "Mustapha",
             "categorie": "Mécanicien",
             "salaire": 24000,
-            "dateDeb": ISODate("2006-04-09T09:00:00Z"),
-            "dateFin": ISODate("2006-04-09T12:00:00Z")
+            "dateDeb": ISODate("2006-04-09T09:00:00.000"),
+            "dateFin": ISODate("2006-04-09T12:00:00.000")
           }
         ]
       },
       {
         "numIntervention": 14,
         "typeIntervention": "Réparation",
-        "dateDeb": ISODate("2006-05-10T14:00:00Z"),
-        "dateFin": ISODate("2006-05-12T12:00:00Z"),
+        "dateDeb": ISODate("2006-05-10T14:00:00.000"),
+        "dateFin": ISODate("2006-05-12T12:00:00.000"),
         "cout": 39000,
         "employes": [
           { //l'employé 88 n'existe pas
@@ -120,8 +120,8 @@ db.vehicules.insertMany([
             "prenom": "",
             "categorie": "",
             "salaire": 0,
-            "dateDeb": ISODate("0000-00-00T00:00:00Z"),
-            "dateFin": ISODate("0000-00-00T00:00:00Z")
+            "dateDeb": "",
+            "dateFin": "",
           }
         ]
       }
@@ -144,8 +144,8 @@ db.vehicules.insertMany([
       {
         "numIntervention": 10,
         "typeIntervention": "Entretien et Réparation",
-        "dateDeb": ISODate("2006-04-08T09:00:00Z"),
-        "dateFin": ISODate("2006-04-09T18:00:00Z"),
+        "dateDeb": ISODate("2006-04-08T09:00:00.000"),
+        "dateFin": ISODate("2006-04-09T18:00:00.000"),
         "cout": 45000,
         "employes": [
           {
@@ -154,8 +154,8 @@ db.vehicules.insertMany([
             "prenom": "Ismail",
             "categorie": "Assistant",
             "salaire": 13000,
-            "dateDeb": ISODate("2006-04-09T14:00:00Z"),
-            "dateFin": ISODate("2006-04-09T18:00:00Z")
+            "dateDeb": ISODate("2006-04-09T14:00:00.000"),
+            "dateFin": ISODate("2006-04-09T18:00:00.000")
           },
           {
             "numEmploye": 67,
@@ -163,8 +163,8 @@ db.vehicules.insertMany([
             "prenom": "Wahid",
             "categorie": "Mécanicien",
             "salaire": 25000,
-            "dateDeb": ISODate("2006-04-08T09:00:00Z"),
-            "dateFin": ISODate("2006-04-09T12:00:00Z")
+            "dateDeb": ISODate("2006-04-08T09:00:00.000"),
+            "dateFin": ISODate("2006-04-09T12:00:00.000")
           }
         ]
       }
@@ -187,8 +187,8 @@ db.vehicules.insertMany([
       {
         "numIntervention": 1,
         "typeIntervention": "Réparation",
-        "dateDeb": ISODate("2006-02-25T09:00:00Z"),
-        "dateFin": ISODate("2006-02-26T12:00:00Z"),
+        "dateDeb": ISODate("2006-02-25T09:00:00.000"),
+        "dateFin": ISODate("2006-02-26T12:00:00.000"),
         "cout": 30000,
         "employes": [
           {
@@ -197,8 +197,8 @@ db.vehicules.insertMany([
             "prenom": "Elias",
             "categorie": "Assistant",
             "salaire": 10000,
-            "dateDeb": ISODate("2006-02-26T09:00:00Z"),
-            "dateFin": ISODate("2006-02-26T12:00:00Z")
+            "dateDeb": ISODate("2006-02-26T09:00:00.000"),
+            "dateFin": ISODate("2006-02-26T12:00:00.000")
           },
           {
             "numEmploye": 59,
@@ -206,8 +206,8 @@ db.vehicules.insertMany([
             "prenom": "Mourad",
             "categorie": "Mécanicien",
             "salaire": 19500,
-            "dateDeb": ISODate("2006-02-25T09:00:00Z"),
-            "dateFin": ISODate("2006-02-25T18:00:00Z")
+            "dateDeb": ISODate("2006-02-25T09:00:00.000"),
+            "dateFin": ISODate("2006-02-25T18:00:00.000")
           }
         ]
       }
@@ -258,8 +258,8 @@ db.vehicules.insertMany([
       {
         "numIntervention": 5,
         "typeIntervention": "Réparation",
-        "dateDeb": ISODate("2006-02-22T09:00:00Z"),
-        "dateFin": ISODate("2006-02-25T18:00:00Z"),
+        "dateDeb": ISODate("2006-02-22T09:00:00.000"),
+        "dateFin": ISODate("2006-02-25T18:00:00.000"),
         "cout": 40000,
         "employes": [
           {
@@ -268,8 +268,8 @@ db.vehicules.insertMany([
             "prenom": "Hakim",
             "categorie": "Mécanicien",
             "salaire": 20000,
-            "dateDeb": ISODate("2006-02-22T09:00:00Z"),
-            "dateFin": ISODate("2006-02-25T12:00:00Z")
+            "dateDeb": ISODate("2006-02-22T09:00:00.000"),
+            "dateFin": ISODate("2006-02-25T12:00:00.000")
           },
           {
             "numEmploye": 60,
@@ -277,8 +277,8 @@ db.vehicules.insertMany([
             "prenom": "Redouane",
             "categorie": "Assistant",
             "salaire": 15000,
-            "dateDeb": ISODate("2006-02-23T09:00:00Z"),
-            "dateFin": ISODate("2006-02-25T18:00:00Z")
+            "dateDeb": ISODate("2006-02-23T09:00:00.000"),
+            "dateFin": ISODate("2006-02-25T18:00:00.000")
           },
 
         ]
@@ -316,8 +316,8 @@ db.vehicules.insertMany([
       {
         "numIntervention": 13,
         "typeIntervention": "Réparation Système",
-        "dateDeb": ISODate("2006-05-12T14:00:00Z"),
-        "dateFin": ISODate("2006-05-12T18:00:00Z"),
+        "dateDeb": ISODate("2006-05-12T14:00:00.000"),
+        "dateFin": ISODate("2006-05-12T18:00:00.000"),
         "cout": 17846,
         "employes": [
           {
@@ -326,8 +326,8 @@ db.vehicules.insertMany([
             "prenom": "Hatem",
             "categorie": "Assistant",
             "salaire": 14000,
-            "dateDeb": ISODate("2006-05-12T14:00:00Z"),
-            "dateFin": ISODate("2006-05-12T18:00:00Z")
+            "dateDeb": ISODate("2006-05-12T14:00:00.000"),
+            "dateFin": ISODate("2006-05-12T18:00:00.000")
           }
         ]
       }
@@ -364,8 +364,8 @@ db.vehicules.insertMany([
       {
         "numIntervention": 4,
         "typeIntervention": "Entretien",
-        "dateDeb": ISODate("2006-05-14T09:00:00Z"),
-        "dateFin": ISODate("2006-05-14T18:00:00Z"),
+        "dateDeb": ISODate("2006-05-14T09:00:00.000"),
+        "dateFin": ISODate("2006-05-14T18:00:00.000"),
         "cout": 10000,
         "employes": [
           {
@@ -374,8 +374,8 @@ db.vehicules.insertMany([
             "prenom": "Ahcene",
             "categorie": "Mécanicien",
             "salaire": 24000,
-            "dateDeb": ISODate("2006-05-14T09:00:00Z"),
-            "dateFin": ISODate("2006-05-14T12:00:00Z")
+            "dateDeb": ISODate("2006-05-14T09:00:00.000"),
+            "dateFin": ISODate("2006-05-14T12:00:00.000")
           },
           {
             "numEmploye": 66,
@@ -383,16 +383,16 @@ db.vehicules.insertMany([
             "prenom": "Abdelaziz",
             "categorie": "Assistant",
             "salaire": 13500,
-            "dateDeb": ISODate("2006-02-14T14:00:00Z"),
-            "dateFin": ISODate("2006-05-14T18:00:00Z")
+            "dateDeb": ISODate("2006-02-14T14:00:00.000"),
+            "dateFin": ISODate("2006-05-14T18:00:00.000")
           }
         ]
       },
       {
         "numIntervention": 27,
         "typeIntervention": "Réparation",
-        "dateDeb": ISODate("1998-01-01T09:00:00Z"),
-        "dateFin": ISODate("1998-01-04T18:00:00Z"),
+        "dateDeb": ISODate("1998-01-01T09:00:00.000"),
+        "dateFin": ISODate("1998-01-04T18:00:00.000"),
         "cout": 12560,
         "employes": [
           {
@@ -465,8 +465,8 @@ db.vehicules.insertMany([
       {
         "numIntervention": 6,
         "typeIntervention": "Entretien",
-        "dateDeb": ISODate("2006-03-03T14:00:00Z"),
-        "dateFin": ISODate("2006-03-04T18:00:00Z"),
+        "dateDeb": ISODate("2006-03-03T14:00:00.000"),
+        "dateFin": ISODate("2006-03-04T18:00:00.000"),
         "cout": 7500,
         "employes": [
           {
@@ -475,8 +475,8 @@ db.vehicules.insertMany([
             "prenom": "Bouzid",
             "categorie": "Mécanicien",
             "salaire": 25000,
-            "dateDeb": ISODate("2006-03-03T14:00:00Z"),
-            "dateFin": ISODate("2006-03-04T12:00:00Z"),
+            "dateDeb": ISODate("2006-03-03T14:00:00.000"),
+            "dateFin": ISODate("2006-03-04T12:00:00.000"),
           },
           {
             "numEmploye": 57,
@@ -484,8 +484,8 @@ db.vehicules.insertMany([
             "prenom": "Abdelhamid",
             "categorie": "Assistant",
             "salaire": 13000,
-            "dateDeb": ISODate("2006-03-04T14:00:00Z"),
-            "dateFin": ISODate("2006-03-04T18:00:00Z"),
+            "dateDeb": ISODate("2006-03-04T14:00:00.000"),
+            "dateFin": ISODate("2006-03-04T18:00:00.000"),
           }
         ]
       }
@@ -537,8 +537,8 @@ db.vehicules.insertMany([
       {
         "numIntervention": 8,
         "typeIntervention": "Entretien",
-        "dateDeb": ISODate("2006-05-11T14:00:00Z"),
-        "dateFin": ISODate("2006-05-12T18:00:00Z"),
+        "dateDeb": ISODate("2006-05-11T14:00:00.000"),
+        "dateFin": ISODate("2006-05-12T18:00:00.000"),
         "cout": 9000,
         "employes": [
           {
@@ -547,8 +547,8 @@ db.vehicules.insertMany([
             "prenom": "Elias",
             "categorie": "Assistant",
             "salaire": 10000,
-            "dateDeb": ISODate("2006-05-12T09:00:00Z"),
-            "dateFin": ISODate("2006-05-12T18:00:00Z")
+            "dateDeb": ISODate("2006-05-12T09:00:00.000"),
+            "dateFin": ISODate("2006-05-12T18:00:00.000")
           },
           {
             "numEmploye": 62,
@@ -556,8 +556,8 @@ db.vehicules.insertMany([
             "prenom": "Ahcene",
             "categorie": "Mécanicien",
             "salaire": 24000,
-            "dateDeb": ISODate("2006-05-11T14:00:00Z"),
-            "dateFin": ISODate("2006-05-12T12:00:00Z")
+            "dateDeb": ISODate("2006-05-11T14:00:00.000"),
+            "dateFin": ISODate("2006-05-12T12:00:00.000")
           }
         ]
       }
@@ -608,8 +608,8 @@ db.vehicules.insertMany([
       {
         "numIntervention": 12,
         "typeIntervention": "Entretien et Réparation",
-        "dateDeb": ISODate("2006-05-03T09:00:00Z"),
-        "dateFin": ISODate("2006-05-05T18:00:00Z"),
+        "dateDeb": ISODate("2006-05-03T09:00:00.000"),
+        "dateFin": ISODate("2006-05-05T18:00:00.000"),
         "cout": 27000,
         "employes": [
           {
@@ -618,8 +618,8 @@ db.vehicules.insertMany([
             "prenom": "Zouhir",
             "categorie": "Assistant",
             "salaire": 12000,
-            "dateDeb": ISODate("2006-05-05T09:00:00Z"),
-            "dateFin": ISODate("2006-05-05T18:00:00Z")
+            "dateDeb": ISODate("2006-05-05T09:00:00.000"),
+            "dateFin": ISODate("2006-05-05T18:00:00.000")
           },
           {
             "numEmploye": 56,
@@ -627,16 +627,16 @@ db.vehicules.insertMany([
             "prenom": "Hakim",
             "categorie": "Mécanicien",
             "salaire": 20000,
-            "dateDeb": ISODate("2006-05-03T09:00:00Z"),
-            "dateFin": ISODate("2006-05-05T12:00:00Z")
+            "dateDeb": ISODate("2006-05-03T09:00:00.000"),
+            "dateFin": ISODate("2006-05-05T12:00:00.000")
           }
         ]
       },
       {
         "numIntervention": 15,
         "typeIntervention": "Réparation Système",
-        "dateDeb": ISODate("2006-06-25T09:00:00Z"),
-        "dateFin": ISODate("2006-06-25T12:00:00Z"),
+        "dateDeb": ISODate("2006-06-25T09:00:00.000"),
+        "dateFin": ISODate("2006-06-25T12:00:00.000"),
         "cout": 27000,
         "employes": [
         ]
@@ -660,8 +660,8 @@ db.vehicules.insertMany([
       {
         "numIntervention": 2,
         "typeIntervention": "Réparation",
-        "dateDeb": ISODate("2006-02-23T09:00:00Z"),
-        "dateFin": ISODate("2006-02-24T18:00:00Z"),
+        "dateDeb": ISODate("2006-02-23T09:00:00.000"),
+        "dateFin": ISODate("2006-02-24T18:00:00.000"),
         "cout": 10000,
         "employes": [
           {
@@ -670,8 +670,8 @@ db.vehicules.insertMany([
             "prenom": "Abdelhamid",
             "categorie": "Assistant",
             "salaire": 13000,
-            "dateDeb": ISODate("2006-02-24T14:00:00Z"),
-            "dateFin": ISODate("2006-02-24T18:00:00Z"),
+            "dateDeb": ISODate("2006-02-24T14:00:00.000"),
+            "dateFin": ISODate("2006-02-24T18:00:00.000"),
           },
           {
             "numEmploye": 59,
@@ -679,8 +679,8 @@ db.vehicules.insertMany([
             "prenom": "Mourad",
             "categorie": "Mécanicien",
             "salaire": 19500,
-            "dateDeb": ISODate("2006-02-23T09:00:00Z"),
-            "dateFin": ISODate("2006-02-24T12:00:00Z"),
+            "dateDeb": ISODate("2006-02-23T09:00:00.000"),
+            "dateFin": ISODate("2006-02-24T12:00:00.000"),
           }
         ]
       }
@@ -703,8 +703,8 @@ db.vehicules.insertMany([
       {
         "numIntervention": 9,
         "typeIntervention": "Entretien",
-        "dateDeb": ISODate("2006-02-22T09:00:00Z"),
-        "dateFin": ISODate("2006-02-22T18:00:00Z"),
+        "dateDeb": ISODate("2006-02-22T09:00:00.000"),
+        "dateFin": ISODate("2006-02-22T18:00:00.000"),
         "cout": 7960,
         "employes": [
           {
@@ -713,8 +713,8 @@ db.vehicules.insertMany([
             "prenom": "Mourad",
             "categorie": "Mécanicien",
             "salaire": 19500,
-            "dateDeb": ISODate("2006-02-22T09:00:00Z"),
-            "dateFin": ISODate("2006-02-22T12:00:00Z")
+            "dateDeb": ISODate("2006-02-22T09:00:00.000"),
+            "dateFin": ISODate("2006-02-22T12:00:00.000")
           },
           {
             "numEmploye": 60,
@@ -722,8 +722,8 @@ db.vehicules.insertMany([
             "prenom": "Redouane",
             "categorie": "Assistant",
             "salaire": 15000,
-            "dateDeb": ISODate("2006-02-22T14:00:00Z"),
-            "dateFin": ISODate("2006-02-22T18:00:00Z")
+            "dateDeb": ISODate("2006-02-22T14:00:00.000"),
+            "dateFin": ISODate("2006-02-22T18:00:00.000")
           }
         ]
       }
@@ -774,8 +774,8 @@ db.vehicules.insertMany([
       {
         "numIntervention": 3,
         "typeIntervention": "Réparation",
-        "dateDeb": ISODate("2006-04-06T14:00:00Z"),
-        "dateFin": ISODate("2006-04-09T12:00:00Z"),
+        "dateDeb": ISODate("2006-04-06T14:00:00.000"),
+        "dateFin": ISODate("2006-04-09T12:00:00.000"),
         "cout": 42000,
         "employes": [
           {
@@ -784,8 +784,8 @@ db.vehicules.insertMany([
             "prenom": "Redouane",
             "categorie": "Assistant",
             "salaire": 15000,
-            "dateDeb": ISODate("2006-04-09T09:00:00Z"),
-            "dateFin": ISODate("2006-04-09T12:00:00Z")
+            "dateDeb": ISODate("2006-04-09T09:00:00.000"),
+            "dateFin": ISODate("2006-04-09T12:00:00.000")
           },
           {
             "numEmploye": 65,
@@ -793,8 +793,8 @@ db.vehicules.insertMany([
             "prenom": "Mustapha",
             "categorie": "Mécanicien",
             "salaire": 24000,
-            "dateDeb": ISODate("2006-04-06T14:00:00Z"),
-            "dateFin": ISODate("2006-04-08T18:00:00Z")
+            "dateDeb": ISODate("2006-04-06T14:00:00.000"),
+            "dateFin": ISODate("2006-04-08T18:00:00.000")
           }
         ]
       }
@@ -845,8 +845,8 @@ db.vehicules.insertMany([
       {
         "numIntervention": 11,
         "typeIntervention": "Réparation",
-        "dateDeb": ISODate("2006-03-08T14:00:00Z"),
-        "dateFin": ISODate("2006-03-17T12:00:00Z"),
+        "dateDeb": ISODate("2006-03-08T14:00:00.000"),
+        "dateFin": ISODate("2006-03-17T12:00:00.000"),
         "cout": 36000,
         "employes": [
           {
@@ -855,8 +855,8 @@ db.vehicules.insertMany([
             "prenom": "Mourad",
             "categorie": "Mécanicien",
             "salaire": 19500,
-            "dateDeb": ISODate("2006-03-09T09:00:00Z"),
-            "dateFin": ISODate("2006-03-11T18:00:00Z")
+            "dateDeb": ISODate("2006-03-09T09:00:00.000"),
+            "dateFin": ISODate("2006-03-11T18:00:00.000")
           },
           {
             "numEmploye": 64,
@@ -864,8 +864,8 @@ db.vehicules.insertMany([
             "prenom": "Hatem",
             "categorie": "Assistant",
             "salaire": 14000,
-            "dateDeb": ISODate("2006-03-09T09:00:00Z"),
-            "dateFin": ISODate("2006-03-17T12:00:00Z")
+            "dateDeb": ISODate("2006-03-09T09:00:00.000"),
+            "dateFin": ISODate("2006-03-17T12:00:00.000")
           },
           {
             "numEmploye": 53,
@@ -873,11 +873,11 @@ db.vehicules.insertMany([
             "prenom": "Bouzid",
             "categorie": "Mécanicien",
             "salaire": 25000,
-            "dateDeb": ISODate("2006-03-08T14:00:00Z"),
-            "dateFin": ISODate("2006-03-16T18:00:00Z"),
+            "dateDeb": ISODate("2006-03-08T14:00:00.000"),
+            "dateFin": ISODate("2006-03-16T18:00:00.000"),
           },
         ]
       }
     ]
   },
-])
+]);

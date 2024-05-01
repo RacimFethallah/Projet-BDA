@@ -50,9 +50,9 @@
       "employes": [
         { //l'employé 88 n'existe pas
           "numEmploye": 88,
-          "nom": "",
-          "prenom": "",
-          "categorie": "",
+          "nom": "null",
+          "prenom": "null",
+          "categorie": "null",
           "salaire": 0,
           "dateDeb": ISODate("0000-00-00T00:00:00.000"),
           "dateFin": ISODate("0000-00-00T00:00:00.000")
@@ -116,9 +116,9 @@ db.vehicules.insertMany([
         "employes": [
           { //l'employé 88 n'existe pas
             "numEmploye": 88,
-            "nom": "",
-            "prenom": "",
-            "categorie": "",
+            "nom": "null",
+            "prenom": "null",
+            "categorie": "null",
             "salaire": 0,
             "dateDeb": "",
             "dateFin": "",
@@ -881,3 +881,121 @@ db.vehicules.insertMany([
     ]
   },
 ]);
+
+
+
+//C. Requetes
+//C. 1. Afficher les véhicules de la marque "PORSCHE"
+db.vehicules.find({ "modele.marque.nomMarque": "PORSCHE" });
+
+
+
+// C. 2.Récupérer dans une nouvelle collection Véhicules_Interventions, les matricules des véhicules et 
+// le nombre total des interventions par véhicule ; la collection devra être ordonnée par ordre décroissant du nombre des interventions. 
+db.vehicules.aggregate([
+  {
+    $match: {
+      interventions: { $exists: true } //pour recuperer les vehicules qui ont des interventions
+    }
+  },
+  {
+    $project: {
+      numImmat: 1, // pour recuperer le matricule des vehicules
+      nbInterventions: { $size: "$interventions" } // pour recuperer le nombre total des interventions
+    }
+  },
+  {
+    $sort: { nbInterventions: -1 } //ordonner de maniere decroissante avec -1 du nombre des interventions
+  },
+  {
+    $out: "vehicules_interventions" //nom de la nouvelle collection
+  },
+]);
+
+
+
+
+//C. 3.Dans une collection véhicule_bcp_pannes, récupérer les véhicules dont le nombre des interventions dépasse 6 pannes
+db.vehicules.aggregate([
+  {
+    $match: {
+      "interventions": { $exists: true },
+      $expr: { $gt: [{ $size: "$interventions" }, 6] }
+    }
+  },
+  {
+    $out: "vehicule_bcp_pannes"
+  }
+]);  //il n'as pas de vehicules avec plus de 6 pannes
+
+
+
+
+//C. 4. Récupérer dans une collection employe-interv, toutes les interventions d’un employé.
+db.vehicules.aggregate([
+  {
+    $unwind: "$interventions" // Décompose le tableau "interventions" pour avoir un document par intervention
+  },
+  {
+    $unwind: "$interventions.employes" // Décompose le tableau "employes" à l'intérieur de chaque intervention pour avoir un document par employé
+  },
+  {
+    $group: { // Regroupe les documents par numéro d'employé
+      _id: "$interventions.employes.numEmploye", // Clé de regroupement basée sur le numéro d'employé
+      nbInterventions: { $sum: 1 },// Compte le nombre d'interventions pour chaque employé
+      interventions: { $push: "$interventions" }, // Ajoute chaque intervention à un tableau pour chaque employé
+    }
+  },
+  {
+    $project: { // Restructure les documents de sortie
+      _id: 0, // Supprime le champ "_id" par défaut
+      numEmploye: "$_id", // Crée un champ "numEmploye" à partir de la clé de regroupement "_id"
+      nbInterventions: 1, // Conserve le champ "nbInterventions"
+      interventions: 1, // Conserve le champ "interventions"
+    }
+  },
+  {
+    $sort: { numEmploye: 1 } //ordonner les numero d'employé par ordre croissant
+  },
+  {
+    $out: "employe-interv" // Écrit les résultats dans la collection "employe-interv"
+  }
+]);
+
+
+
+
+
+//C. 5. Augmenter de 8000DA, le salaire des employés de catégorie « Mécanicien»
+db.vehicules.updateMany(
+  { "interventions.employes.categorie": "Mécanicien" },
+  { $inc: { "interventions.$[].employes.$[emp].salaire": 8000 } },
+  { arrayFilters: [{ "emp.categorie": "Mécanicien" }] }
+);
+
+
+
+
+
+//C. 6. Reprendre la 4ième requête à l’aide du paradigme Map-Reduce. 
+var map = function() {
+  if (this.interventions) { //parce que ce n'est pas tout les vehicules qui ont des interventions
+      this.interventions.forEach(function(intervention) {
+          intervention.employes.forEach(function(employe) {
+              emit(employe.numEmploye, intervention);
+          });
+      });
+  }
+};
+
+var reduce = function(numEmploye, interventions) {
+  return interventions;
+};
+
+db.vehicules.mapReduce(
+  map,
+  reduce,
+  {
+      out: "employe-interv-mapreduce"
+  }
+);

@@ -1,4 +1,5 @@
 //Collection vehicules
+//A.1  Proposer une modélisation orientée document de la base de données décrite dans la partie I, dans ce cas:
 {
     "numVehicule": 1,
     "numImmat": "0012519216",

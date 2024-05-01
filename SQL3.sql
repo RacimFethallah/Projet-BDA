@@ -109,7 +109,7 @@ CREATE OR REPLACE TYPE tmarque AS OBJECT(
 CREATE OR REPLACE TYPE tmodele AS OBJECT(
     nummodele INTEGER,
     modele VARCHAR2(50),
-    ref_marque REF tmarque,
+    marque REF tmarque,
     modele_vehicule nt_ref_vehicule
 );
 /
@@ -121,8 +121,8 @@ CREATE OR REPLACE TYPE tvehicule AS OBJECT(
     NUMVEHICULE INTEGER,
     NUMIMMAT VARCHAR2(50),
     ANNEE VARCHAR2(50),
-    ref_client REF tclient,
-    ref_modele REF tmodele,
+    client REF tclient,
+    modele REF tmodele,
     vehicule_interventions nt_ref_interventions
 );
 /
@@ -133,7 +133,7 @@ CREATE OR REPLACE TYPE tinterventions AS OBJECT(
     DATEDEBINTERV DATE,
     DATEFININTERV DATE,
     COUTINTERV float,
-    ref_vehicule REF tvehicule,
+    vehicule REF tvehicule,
     interventions_intervenants nt_ref_intervenants
 );
 /
@@ -141,8 +141,8 @@ CREATE OR REPLACE TYPE tinterventions AS OBJECT(
 CREATE OR REPLACE TYPE tintervenants AS OBJECT(
     DATEDEBUT DATE,
     DATEFIN DATE,
-    ref_interventions REF tinterventions,
-    ref_employe REF temploye,
+    interventions REF tinterventions,
+    employe REF temploye
 );
 /
 
@@ -163,21 +163,6 @@ WHERE OBJECT_NAME = 'TEMPLOYE';
 ALTER TYPE temploye
 ADD MEMBER FUNCTION calcul_interventions RETURN INTEGER
 CASCADE;
-
-
--- -- on doit d'abbord creer la table intervenants
--- CREATE OR REPLACE TYPE BODY temploye AS
---     MEMBER FUNCTION calcul_interventions RETURN NUMBER IS
---         nombre_interventions NUMBER;
---     BEGIN
---         SELECT COUNT(*) INTO nombre_interventions
---         FROM INTERVENANTS
---         WHERE NUMEMPLOYE = self.numemploye;
-        
---         RETURN nombre_interventions;
---     END calcul_interventions;
--- END;
--- /
 
 -- --good
 -- CREATE OR REPLACE TYPE BODY temploye AS
@@ -221,7 +206,7 @@ CREATE OR REPLACE TYPE BODY tmarque AS
     MEMBER FUNCTION calcul_modeles RETURN INTEGER IS
         nombre_modeles INTEGER := 0;
     BEGIN
-        nombre_modeles := self.modeles.COUNT;
+        nombre_modeles := self.marque_modele.COUNT;
         RETURN nombre_modeles;
     END;
 END;
@@ -260,7 +245,7 @@ CREATE OR REPLACE TYPE BODY tmodele AS
     MEMBER FUNCTION calcul_vehicules RETURN INTEGER IS
         nombre_vehicules INTEGER := 0;
     BEGIN
-        nombre_vehicules := self.vehicules.COUNT;
+        nombre_vehicules := self.modele_vehicule.COUNT;
         RETURN nombre_vehicules;
     END;
 END;
@@ -269,17 +254,17 @@ END;
 
 
 --------------------------------------------------------------------------------------------------------
--- 6.4 Lister pour chaque client, ses  véhicules. 
+-- 6.4 Lister pour chaque client, ses véhicules. 
 
 ALTER TYPE tclient
-ADD MEMBER FUNCTION lister_vehicules RETURN tset_ref_vehicule
+ADD MEMBER FUNCTION lister_vehicules RETURN nt_ref_vehicule
 CASCADE;
 
 
 CREATE OR REPLACE TYPE BODY tclient AS
-    MEMBER FUNCTION lister_vehicules RETURN tset_ref_vehicule IS
+    MEMBER FUNCTION lister_vehicules RETURN nt_ref_vehicule IS
     BEGIN
-        RETURN self.vehicules;
+        RETURN self.client_vehicule;
     END;
 END;
 /
@@ -363,39 +348,39 @@ END;
 CREATE TABLE client OF tclient (
     CONSTRAINT numclient_pk PRIMARY KEY (numclient),
     CONSTRAINT civ_check CHECK (civ IN ('M.', 'Mle', 'Mme')))
-NESTED TABLE vehicules STORE AS tab_client_vehicules;
+NESTED TABLE client_vehicule STORE AS tab_client_vehicule;
 
 
 
 CREATE TABLE employe OF temploye (
     CONSTRAINT numemploye_pk PRIMARY KEY (NUMEMPLOYE),
     CONSTRAINT categorie_check CHECK (categorie IN ('Mecanicien', 'Assistant')))
-NESTED TABLE intervenants STORE AS tab_employe_intervenant;
+NESTED TABLE employe_intervenants STORE AS tab_employe_intervenants;
 
 
 
 CREATE TABLE marque OF tmarque (
     CONSTRAINT nummarque_pk PRIMARY KEY (NUMMARQUE))
-NESTED TABLE modeles STORE AS tab_marque_modele;
+NESTED TABLE marque_modele STORE AS tab_marque_modele;
 
 CREATE TABLE modele OF tmodele (
     CONSTRAINT nummodele_pk PRIMARY KEY (NUMMODELE),
     CONSTRAINT nummarque_fk FOREIGN KEY (marque) REFERENCES marque)
-NESTED TABLE vehicules STORE AS tab_modele_vehicule;
+NESTED TABLE modele_vehicule STORE AS tab_modele_vehicule;
 
 CREATE TABLE vehicule OF tvehicule (
     CONSTRAINT numvehicule_pk PRIMARY KEY (NUMVEHICULE),
     CONSTRAINT numclient_fk FOREIGN KEY (client) REFERENCES client,
     CONSTRAINT nummodele_fk FOREIGN KEY (modele) REFERENCES modele)
-NESTED TABLE interventions STORE AS tab_vehicule_intervention;
+NESTED TABLE vehicule_interventions STORE AS tab_vehicule_interventions;
 
 CREATE TABLE interventions OF tinterventions (
     CONSTRAINT numintervention_pk PRIMARY KEY (NUMINTERVENTION),
     CONSTRAINT numvehicule_fk FOREIGN KEY (vehicule) REFERENCES vehicule)
-    NESTED TABLE intervenants STORE AS tab_intervenant_intervention;
+    NESTED TABLE interventions_intervenants STORE AS tab_interventions_intervenants;
 
 CREATE TABLE intervenants OF tintervenants (
-    CONSTRAINT numintervention_fk FOREIGN KEY (intervention) REFERENCES interventions,
+    CONSTRAINT numintervention_fk FOREIGN KEY (interventions) REFERENCES interventions,
     CONSTRAINT numemploye_fk FOREIGN KEY (employe) REFERENCES employe);
 
 

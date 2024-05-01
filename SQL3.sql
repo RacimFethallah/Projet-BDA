@@ -59,13 +59,13 @@ CREATE type tinterventions;
 CREATE type tintervenants;
 /
 
-CREATE type tset_ref_modele AS TABLE OF ref tmodele;
+CREATE type nt_ref_modele AS TABLE OF ref tmodele;
 /
-CREATE type tset_ref_vehicule AS TABLE OF ref tvehicule;
+CREATE type nt_ref_vehicule AS TABLE OF ref tvehicule;
 /
-CREATE type tset_ref_interventions AS TABLE OF ref tinterventions;
+CREATE type nt_ref_interventions AS TABLE OF ref tinterventions;
 /
-CREATE type tset_ref_intervenants AS TABLE OF ref tintervenants;
+CREATE type nt_ref_intervenants AS TABLE OF ref tintervenants;
 /
 
 
@@ -79,7 +79,7 @@ CREATE OR REPLACE TYPE tclient AS OBJECT(
     TELPROF VARCHAR2(10), 
     TELPRIV VARCHAR2(10), 
     FAX VARCHAR2(10),
-    vehicules tset_ref_vehicule
+    client_vehicule nt_ref_vehicule
 );
 /
 
@@ -90,7 +90,7 @@ CREATE OR REPLACE TYPE temploye AS OBJECT(
     prenomemploye VARCHAR2(50),
     categorie VARCHAR2(50),
     salaire float,
-    intervenants tset_ref_intervenants
+    employe_intervenants nt_ref_intervenants
 );
 /
 
@@ -100,7 +100,7 @@ CREATE OR REPLACE TYPE tmarque AS OBJECT(
     NUMMARQUE INTEGER,
     MARQUE VARCHAR2(50),
     PAYS VARCHAR2(50),
-    modeles tset_ref_modele
+    marque_modele nt_ref_modele
 );
 /
 
@@ -108,9 +108,9 @@ CREATE OR REPLACE TYPE tmarque AS OBJECT(
 
 CREATE OR REPLACE TYPE tmodele AS OBJECT(
     nummodele INTEGER,
-    marque REF tmarque,
     modele VARCHAR2(50),
-    vehicules tset_ref_vehicule
+    ref_marque REF tmarque,
+    modele_vehicule nt_ref_vehicule
 );
 /
 
@@ -119,30 +119,30 @@ CREATE OR REPLACE TYPE tmodele AS OBJECT(
 
 CREATE OR REPLACE TYPE tvehicule AS OBJECT(
     NUMVEHICULE INTEGER,
-    client REF tclient,
-    modele REF tmodele,
     NUMIMMAT VARCHAR2(50),
     ANNEE VARCHAR2(50),
-    interventions tset_ref_interventions
+    ref_client REF tclient,
+    ref_modele REF tmodele,
+    vehicule_interventions nt_ref_interventions
 );
 /
 
 CREATE OR REPLACE TYPE tinterventions AS OBJECT(
     NUMINTERVENTION INTEGER,
-    vehicule REF tvehicule,
     TYPEINTERVENTION VARCHAR2(50),
     DATEDEBINTERV DATE,
     DATEFININTERV DATE,
     COUTINTERV float,
-    intervenants tset_ref_intervenants
+    ref_vehicule REF tvehicule,
+    interventions_intervenants nt_ref_intervenants
 );
 /
 
 CREATE OR REPLACE TYPE tintervenants AS OBJECT(
-    intervention REF tinterventions,
-    employe REF temploye,
     DATEDEBUT DATE,
-    DATEFIN DATE
+    DATEFIN DATE,
+    ref_interventions REF tinterventions,
+    ref_employe REF temploye,
 );
 /
 
@@ -196,7 +196,7 @@ CREATE OR REPLACE TYPE BODY temploye AS
     MEMBER FUNCTION calcul_interventions RETURN INTEGER IS
         nombre_interventions INTEGER := 0;
     BEGIN
-        nombre_interventions := self.intervenants.COUNT;
+        nombre_interventions := self.employe_intervenants.COUNT;
         RETURN nombre_interventions;
     END;
 END;

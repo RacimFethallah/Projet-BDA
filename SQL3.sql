@@ -762,6 +762,41 @@ insert into table(select e.employe_intervenants from employe e  where e.NUMEMPLO
 
 INSERT INTO table (SELECT ma.marque_modele FROM marque ma WHERE ma.NUMMARQUE =1) VALUES ((SELECT REF(mo) FROM modele mo WHERE NUMMODELE =2));
 
+INSERT INTO table (SELECT ma.marque_modele FROM marque ma WHERE ma.NUMMARQUE =2) VALUES ((SELECT REF(mo) FROM modele mo WHERE NUMMODELE =3));
+
+INSERT INTO table (SELECT ma.marque_modele FROM marque ma WHERE ma.NUMMARQUE =10) VALUES ((SELECT REF(mo) FROM modele mo WHERE NUMMODELE =4));
+
+INSERT INTO table (SELECT ma.marque_modele FROM marque ma WHERE ma.NUMMARQUE =14) VALUES ((SELECT REF(mo) FROM modele mo WHERE NUMMODELE =5));
+
+INSERT INTO table (SELECT ma.marque_modele FROM marque ma WHERE ma.NUMMARQUE =17) VALUES ((SELECT REF(mo) FROM modele mo WHERE NUMMODELE =6));
+
+INSERT INTO table (SELECT ma.marque_modele FROM marque ma WHERE ma.NUMMARQUE =20) VALUES ((SELECT REF(mo) FROM modele mo WHERE NUMMODELE =7));
+
+INSERT INTO table (SELECT ma.marque_modele FROM marque ma WHERE ma.NUMMARQUE =12) VALUES ((SELECT REF(mo) FROM modele mo WHERE NUMMODELE =8));
+
+INSERT INTO table (SELECT ma.marque_modele FROM marque ma WHERE ma.NUMMARQUE =15) VALUES ((SELECT REF(mo) FROM modele mo WHERE NUMMODELE =9));
+
+INSERT INTO table (SELECT ma.marque_modele FROM marque ma WHERE ma.NUMMARQUE =19) VALUES ((SELECT REF(mo) FROM modele mo WHERE NUMMODELE =10));
+
+INSERT INTO table (SELECT ma.marque_modele FROM marque ma WHERE ma.NUMMARQUE =7) VALUES ((SELECT REF(mo) FROM modele mo WHERE NUMMODELE =11));
+
+INSERT INTO table (SELECT ma.marque_modele FROM marque ma WHERE ma.NUMMARQUE =3) VALUES ((SELECT REF(mo) FROM modele mo WHERE NUMMODELE =12));
+
+INSERT INTO table (SELECT ma.marque_modele FROM marque ma WHERE ma.NUMMARQUE =10) VALUES ((SELECT REF(mo) FROM modele mo WHERE NUMMODELE =13));
+
+INSERT INTO table (SELECT ma.marque_modele FROM marque ma WHERE ma.NUMMARQUE =13) VALUES ((SELECT REF(mo) FROM modele mo WHERE NUMMODELE =14));
+
+INSERT INTO table (SELECT ma.marque_modele FROM marque ma WHERE ma.NUMMARQUE =16) VALUES ((SELECT REF(mo) FROM modele mo WHERE NUMMODELE =15));
+
+INSERT INTO table (SELECT ma.marque_modele FROM marque ma WHERE ma.NUMMARQUE =16) VALUES ((SELECT REF(mo) FROM modele mo WHERE NUMMODELE =16));
+
+INSERT INTO table (SELECT ma.marque_modele FROM marque ma WHERE ma.NUMMARQUE =21) VALUES ((SELECT REF(mo) FROM modele mo WHERE NUMMODELE =17));
+
+INSERT INTO table (SELECT ma.marque_modele FROM marque ma WHERE ma.NUMMARQUE =6) VALUES ((SELECT REF(mo) FROM modele mo WHERE NUMMODELE =18));
+
+INSERT INTO table (SELECT ma.marque_modele FROM marque ma WHERE ma.NUMMARQUE =4) VALUES ((SELECT REF(mo) FROM modele mo WHERE NUMMODELE =19));
+
+INSERT INTO table (SELECT ma.marque_modele FROM marque ma WHERE ma.NUMMARQUE =9) VALUES ((SELECT REF(mo) FROM modele mo WHERE NUMMODELE =20));
 
 
 ---------------------------  table modele_vehicule -----------------------------------------------------------------------------

@@ -1,23 +1,23 @@
-DROP TABLESPACE SQL3_TBS INCLUDING CONTENTS AND DATAFILES;
-DROP TABLESPACE SQL3_TempTBS INCLUDING CONTENTS AND DATAFILES;
-DROP USER SQL3_BDA CASCADE;
+--au cas ou
+-- DROP TABLESPACE SQL3_TBS INCLUDING CONTENTS AND DATAFILES;
+-- DROP TABLESPACE SQL3_TempTBS INCLUDING CONTENTS AND DATAFILES;
+-- DROP USER SQL3_BDA CASCADE;
 
 
--- TODO : PAS DE NESTED TABLE 
 
 
 -- Partie 1 Partie I : Relationnel-Objet 
 
--- B. Creation des TableSpaces et  utilisateur 
+---------------------------------------- B. Creation des TableSpaces et utilisateur -----------------------------------------------------
 
 -- 2. Creer deux TableSpaces   SQL3_TBS et  SQL3_TempTBS 
 --TableSpace
 CREATE TABLESPACE SQL3_TBS
-DATAFILE 'c:\sql3_tbs.dat' SIZE 50M
+DATAFILE 'D:\01_DevCode\uni\bda\Projet-BDA\tablespaces\sql3_tbs.dat' SIZE 50M
 AUTOEXTEND ON;
 --Temporary Tablespace
 CREATE TEMPORARY TABLESPACE SQL3_TempTBS
-TEMPFILE 'c:\sql3_Temptbs.dat' SIZE 25M;
+TEMPFILE 'D:\01_DevCode\uni\bda\Projet-BDA\tablespaces\sql3_Temptbs.dat' SIZE 25M;
 
 
 
@@ -33,7 +33,7 @@ QUOTA UNLIMITED ON SQL3_TBS;
 GRANT ALL PRIVILEGES TO SQL3_BDA;
 
 
--- C. Langage de definition de donnees
+------------------------------------------- C. Langage de definition de donnees ---------------------------------------------------
 -- 5. definir tous les types necessaires.
 
 
@@ -162,7 +162,6 @@ WHERE OBJECT_NAME = 'TEMPLOYE';
 
 -- 6.1 Calculer pour chaque employé, le nombre des interventions effectuées. 
 
---- good
 ALTER TYPE temploye
 ADD MEMBER FUNCTION calcul_interventions RETURN INTEGER
 CASCADE;
@@ -940,10 +939,11 @@ WHERE COUTINTERV > 30000;
 
 
 
+
+
+
+
 -- 13. Donner la liste des employés ayant fait le plus grand nombre d’interventions.
-
-
-
 SELECT e.NUMEMPLOYE, e.nomemploye, e.prenomemploye, e.calcul_interventions() as nb_interventions
 from employe e
 where e.calcul_interventions() > 0

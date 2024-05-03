@@ -1,7 +1,7 @@
-//Collection vehicules
+// Collection vehicules
 
-//B. Remplir la collection via un script
-//Insertions des vehicules dans la collection vehicules
+// B. Remplir la collection via un script
+// Insertions des vehicules dans la collection vehicules
 db.vehicules.insertMany([
   {
     "numVehicule": 1,

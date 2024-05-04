@@ -823,7 +823,7 @@ db.vehicules.insertMany([
 
 //C. Requetes
 //C. 1. Afficher les véhicules de la marque "PORSCHE"
-  db.vehicules.find({ "modele.marque.nomMarque": "PORSCHE" });
+db.vehicules.find({ "modele.marque.nomMarque": "PORSCHE" });
 
 
 
@@ -916,18 +916,18 @@ db.vehicules.updateMany(
 
 //C. 6. Reprendre la 4ième requête à l’aide du paradigme Map-Reduce.
 //1. fontion map pour générer des documents clés-valeurs pour les transmettre en entrée à Reduce. 
-var map = function() {
+var map = function () {
   if (this.interventions) { //parce que ce n'est pas tout les vehicules qui ont des interventions
-      this.interventions.forEach(function(intervention) {
-          intervention.employes.forEach(function(employe) {
-              emit(employe.numEmploye, intervention);
-          });
+    this.interventions.forEach(function (intervention) {
+      intervention.employes.forEach(function (employe) {
+        emit(employe.numEmploye, intervention);
       });
+    });
   }
 };
 
 //2. pour retourne le résultat agrégé à partir de ces documents en entrée. numEmploye: key, interventions: value
-var reduce = function(numEmploye, interventions) {
+var reduce = function (numEmploye, interventions) {
   return interventions;
 };
 
@@ -936,6 +936,6 @@ db.vehicules.mapReduce(
   map,
   reduce,
   {
-      out: "employe-interv-mapreduce"
+    out: "employe-interv-mapreduce"
   }
 );
